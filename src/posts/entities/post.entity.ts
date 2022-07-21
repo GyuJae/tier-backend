@@ -4,8 +4,8 @@ import { CoreEntity } from 'src/core/entities/core.entity';
 
 @ObjectType()
 export class ItemEntity extends CoreEntity implements Item {
-  @Field(() => String)
-  name: string;
+  @Field(() => String, { nullable: true })
+  name: string | null;
 
   @Field(() => String)
   poster: string;
