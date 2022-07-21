@@ -1,6 +1,10 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { ICreatePostInput, ICreatePostOutput } from './dtos/createPost.dto';
 import {
+  ICreatePostItemInput,
+  ICreatePostItemOutput,
+} from './dtos/createPostItem.dto';
+import {
   IReadPostItemsInput,
   IReadPostItemsOutput,
 } from './dtos/readPostItems.dto';
@@ -28,5 +32,12 @@ export class PostsResolver {
     @Args('input') createPostInput: ICreatePostInput,
   ): Promise<ICreatePostOutput> {
     return this.postService.createPost(createPostInput);
+  }
+
+  @Mutation(() => ICreatePostItemOutput)
+  async createPostItem(
+    @Args('input') createPostItemInput: ICreatePostItemInput,
+  ): Promise<ICreatePostItemOutput> {
+    return this.postService.createPostItem(createPostItemInput);
   }
 }

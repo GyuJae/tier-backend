@@ -2,6 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ICreatePostInput, ICreatePostOutput } from './dtos/createPost.dto';
 import {
+  ICreatePostItemInput,
+  ICreatePostItemOutput,
+} from './dtos/createPostItem.dto';
+import {
   IReadPostItemsInput,
   IReadPostItemsOutput,
 } from './dtos/readPostItems.dto';
@@ -29,20 +33,12 @@ export class PostsService {
   async createPost({
     name,
     thumbnail,
-    items,
   }: ICreatePostInput): Promise<ICreatePostOutput> {
     try {
-      if (items.length === 0) throw new Error('Required Item');
-
       await this.prismaService.post.create({
         data: {
           name,
           thumbnail,
-          items: {
-            createMany: {
-              data: items,
-            },
-          },
         },
         select: {
           id: true,
@@ -80,6 +76,37 @@ export class PostsService {
       return {
         ok: true,
         items,
+      };
+    } catch (error) {
+      return {
+        ok: false,
+        error: error.message,
+      };
+    }
+  }
+
+  async createPostItem({
+    postId,
+    poster,
+  }: ICreatePostItemInput): Promise<ICreatePostItemOutput> {
+    try {
+      const post = await this.prismaService.post.findUnique({
+        where: {
+          id: postId,
+        },
+        select: {
+          id: true,
+        },
+      });
+      if (!post) throw new Error('Not found Post by this Id');
+      await this.prismaService.item.create({
+        data: {
+          poster,
+          postId: post.id,
+        },
+      });
+      return {
+        ok: true,
       };
     } catch (error) {
       return {
