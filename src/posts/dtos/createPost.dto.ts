@@ -3,11 +3,7 @@ import { CoreOutput } from 'src/core/dtos/coreOutput.dto';
 import { ItemEntity, PostEntity } from '../entities/post.entity';
 
 @InputType()
-class ICreateItemInput extends PickType(
-  ItemEntity,
-  ['name', 'poster'],
-  InputType,
-) {}
+class ICreateItemInput extends PickType(ItemEntity, ['poster'], InputType) {}
 
 @InputType()
 export class ICreatePostInput extends PickType(

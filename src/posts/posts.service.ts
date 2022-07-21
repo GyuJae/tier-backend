@@ -34,17 +34,19 @@ export class PostsService {
     try {
       if (items.length === 0) throw new Error('Required Item');
 
-      const post = await this.prismaService.post.create({
+      await this.prismaService.post.create({
         data: {
           name,
           thumbnail,
+          items: {
+            createMany: {
+              data: items,
+            },
+          },
         },
         select: {
           id: true,
         },
-      });
-      await this.prismaService.item.createMany({
-        data: items.map((item) => ({ ...item, postId: post.id })),
       });
       return {
         ok: true,
