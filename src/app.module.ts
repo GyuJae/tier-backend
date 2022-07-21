@@ -7,6 +7,7 @@ import { CoreModule } from './core/core.module';
 import { ConfigModule } from '@nestjs/config';
 import { PostsModule } from './posts/posts.module';
 import { AppController } from './app.controller';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AppController } from './app.controller';
       sortSchema: true,
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
+    HttpModule,
     PrismaModule,
     CoreModule,
     ConfigModule.forRoot({
